@@ -10,5 +10,5 @@ public interface IMainActivity {
 	public Context getContext();
 	
 	public void direct (Class<?> direction);
-	public void rendereFragment(Integer viewId);
+	public void rendereFragment(String viewId);
 }

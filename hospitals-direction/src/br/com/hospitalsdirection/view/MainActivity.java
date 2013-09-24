@@ -54,16 +54,20 @@ public class MainActivity extends RoboFragmentActivity implements IMainActivity 
 	}
 
 	@Override
-	public void rendereFragment(Integer viewId) {
-		switch (viewId) {
-		case R.id.btHospitalNear:
-				FragmentManager manager = getSupportFragmentManager();
-				manager.beginTransaction().replace(R.id.layout1, hospitalFragment).addToBackStack("replaceFrag2toFrag1").commit();
-			break;
+	public void rendereFragment(String viewId) {
+		if(viewId == getContext().getString(R.string.hospital_proximos)){
+			FragmentManager manager = getSupportFragmentManager();
+			manager.beginTransaction().replace(R.id.layout1, hospitalFragment).addToBackStack("replaceFrag2toFrag1").commit();
+		}
+	/*	switch (viewId) {
+//		case R.id.btHospitalNear:
+//				FragmentManager manager = getSupportFragmentManager();
+//				manager.beginTransaction().replace(R.id.layout1, hospitalFragment).addToBackStack("replaceFrag2toFrag1").commit();
+//			break;
 
 		default:
 			break;
-		}
+		}*/
 		
 	} 
 

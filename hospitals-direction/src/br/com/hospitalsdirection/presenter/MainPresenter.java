@@ -15,27 +15,21 @@ public class MainPresenter implements IMainPresenter{
 
 
 	private IMainActivity mainActivity;
-	
 
-	
+
+
 	@Inject
 	public MainPresenter(final Activity activity) {
 		mainActivity = (IMainActivity) activity;
 		Log.d("Activity injec", "testee");
 	}
-	
+
 
 	@Override
-	public void optionSelected(Integer option) {
-			//mainActivity.direct(Radio.class);
-			switch (option) {
-			case R.id.btHospitalNear:
-				mainActivity.rendereFragment(option);
-				break;
+	public void optionSelected(String option) {
+		mainActivity .rendereFragment(option);
+		//mainActivity.direct(Radio.class);
 
-			default:
-				break;
-			}
-		}
-	
+	}
+
 }

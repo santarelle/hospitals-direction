@@ -5,6 +5,6 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(MainPresenter.class)
 public interface IMainPresenter {
 
-	public void optionSelected(Integer option);
+	public void optionSelected(String option);
 	
 }
