@@ -12,6 +12,6 @@ public interface ICommunicationService {
 	
 	
 	public String lugaresProximos();
-	public List<Hospital> hospitaisProximos(Double latitude, Double longitude);
+	public List<Hospital> hospitaisProximos(Double latitude, Double longitude, float raioM);
 	public Rota getRota(final String start, final String dest);
 }
