@@ -3,10 +3,7 @@ package br.com.hospitalsdirection.presenter;
 import roboguice.inject.ContextSingleton;
 import android.app.Activity;
 import android.util.Log;
-import br.com.hospitalsdirection.manager.communicationsmanager.ICommunicationService;
 import br.com.hospitalsdirection.view.IMainActivity;
-import br.com.hospitalsdirection.view.R;
-import br.com.hospitalsdirection.view.Radio;
 
 import com.google.inject.Inject;
 

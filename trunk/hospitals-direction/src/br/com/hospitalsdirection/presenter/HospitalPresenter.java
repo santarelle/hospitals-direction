@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import roboguice.inject.ContextSingleton;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -32,84 +34,101 @@ import com.google.inject.Inject;
 public class HospitalPresenter implements IHospitalPresenter {
 
 	IHospitalFragment hospitalFragment;
-	
+
+
+
 	@Inject
 	ICommunicationService communicationService;
 	@Inject
 	LocationService locationService;
-	
-		
+
+
 	private Location location;
-	
+	private ProgressDialog progressDialog;
 	private PolylineOptions rectOptions;
 	private Polyline polyline;
 	private Marker markerLocation;
-	
+	private boolean proximos = false;
+	private Context context;	
 	private LocationListener locationListener = new LocationListener() {
-		
 		@Override
 		public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-			
+
 		}
-		
+
 		@Override
 		public void onProviderEnabled(String arg0) {
-			
+
 		}
-		
+
 		@Override
 		public void onProviderDisabled(String arg0) {
-			
+
 		}
-		
+
 		@Override
-		public void onLocationChanged(Location location) {
+		public void onLocationChanged(Location loc) {
 			if(markerLocation!=null){
 				markerLocation.remove();
 			}
 			markerLocation= hospitalFragment.getMap().addMarker(new MarkerOptions()
-            .position(new LatLng(location.getLatitude(), location.getLongitude()))
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ambulance)));
-			populateHospitaisNear();  
+			.position(new LatLng(location.getLatitude(), location.getLongitude()))
+			.icon(BitmapDescriptorFactory.fromResource(R.drawable.ambulance)));
+			location =loc;
+			if(proximos){
+				populateHospitaisNear();  
+				proximos = false;
+				if(progressDialog.isShowing()){
+					progressDialog.dismiss();
+				}
+
+			}
 		}
 	};
 
-	
+
 	@Inject
-	public HospitalPresenter(IHospitalFragment fragment){
+	public HospitalPresenter(IHospitalFragment fragment, Context context){
 		hospitalFragment = (HospitalFragment) fragment;
-	
+		this.context = context;
 		Log.d("fragmente inject", "presenter");
 	}
 
 	public void populate(){
+		progressDialog = ProgressDialog.show(context, "Hospitals Direction", "Carregando Informaçoes de localizaçao");
 		if(locationService.gpsAtivo()){
 			location = locationService.getLocation(locationListener);
 			if(location!=null){
+				proximos = true;
 				populateHospitaisNear();
 				markerLocation= hospitalFragment.getMap().addMarker(new MarkerOptions()
-	            .position(new LatLng(location.getLatitude(), location.getLongitude())).title("")
-	            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ambulance)));
+				.position(new LatLng(location.getLatitude(), location.getLongitude())).title("")
+				.icon(BitmapDescriptorFactory.fromResource(R.drawable.ambulance)));
+				if(progressDialog.isShowing()){
+					progressDialog.dismiss();
+				}
 			}
+
 		}
 	}
 	private void populateHospitaisNear() {
-			List<Hospital> listHospital = communicationService.hospitaisProximos(location.getLatitude(), location.getLongitude());		
-			this.addMarker(listHospital);
+		List<Hospital> listHospital = communicationService.hospitaisProximos(location.getLatitude(), location.getLongitude());		
+		this.addMarker(listHospital);
+		proximos=false;
 	}
-	
+
 	private void addMarker(List<Hospital> listHospitals){
 		GoogleMap map =hospitalFragment.getMap();
 		for (Hospital hospital : listHospitals) {
 			map.addMarker(new MarkerOptions()
-            .position(new LatLng(hospital.getLatitude(), hospital.getLongitude()))
-            .title(hospital.getNome())
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital_building))).showInfoWindow();
+			.position(new LatLng(hospital.getLatitude(), hospital.getLongitude()))
+			.title(hospital.getNome())
+			.icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital_building))).showInfoWindow();
 			Log.d("hospital", ""+hospital.getNome());
 		}
-		
+
 		map.setOnMarkerClickListener(new OnMarkerClickListener() {
-			
+
 			@Override
 			public boolean onMarkerClick(Marker marker) {
 				Rota rota = communicationService.getRota(location.getLatitude()+","+location.getLongitude(),marker.getPosition().latitude+","+marker.getPosition().longitude );
@@ -118,10 +137,10 @@ public class HospitalPresenter implements IHospitalPresenter {
 			}
 		});
 	}
-	
+
 	public void adicionaLinhaMapa(List<LatLng> listaCoordenadas, int cor){
 
-		 rectOptions = new PolylineOptions();
+		rectOptions = new PolylineOptions();
 
 
 		if(listaCoordenadas != null && listaCoordenadas.size() > 0){
@@ -136,11 +155,11 @@ public class HospitalPresenter implements IHospitalPresenter {
 
 		if(rectOptions != null && rectOptions.getPoints().size() > 0){
 			mHandlerAddLinha.sendEmptyMessage(0);
-			
+
 		}
 
 	}
-	
+
 	Handler mHandlerAddLinha = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			if(polyline!=null){
@@ -150,5 +169,5 @@ public class HospitalPresenter implements IHospitalPresenter {
 			polyline.setGeodesic(true);
 		};
 	};
-	
+
 }
