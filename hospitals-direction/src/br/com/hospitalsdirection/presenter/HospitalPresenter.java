@@ -6,11 +6,13 @@ import java.util.List;
 import roboguice.inject.ContextSingleton;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import br.com.hospitalsdirection.manager.communicationsmanager.ICommunicationService;
 import br.com.hospitalsdirection.manager.contextmanager.LocationService;
@@ -112,7 +114,9 @@ public class HospitalPresenter implements IHospitalPresenter {
 		}
 	}
 	private void populateHospitaisNear() {
-		List<Hospital> listHospital = communicationService.hospitaisProximos(location.getLatitude(), location.getLongitude());		
+		SharedPreferences 	shrPreference = PreferenceManager.getDefaultSharedPreferences(context);
+		float raioM = (shrPreference.getFloat("radius",5)*1000);
+		List<Hospital> listHospital = communicationService.hospitaisProximos(location.getLatitude(), location.getLongitude(),raioM);		
 		this.addMarker(listHospital);
 		proximos=false;
 	}

@@ -7,8 +7,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
-import org.xml.sax.Parser;
-
 import roboguice.inject.ContextSingleton;
 import android.util.Log;
 import br.com.hospitalsdirection.manager.contextmanager.LocationService;
@@ -41,14 +39,14 @@ public class CommunicationService implements ICommunicationService {
 		return "lugares proximos";
 	}
 	
-	public List<Hospital> hospitaisProximos(Double latitude, Double longitude){
+	public List<Hospital> hospitaisProximos(Double latitude, Double longitude, float raioM){
 		List<Hospital> hospitals=null;
 		String jsonURL = "https://maps.googleapis.com/maps/api/place/search/json?";
 		final StringBuffer sBuf = new StringBuffer(jsonURL);
 		sBuf.append("location=");
 		sBuf.append(latitude+","+longitude);
 		sBuf.append("&radius=");
-		sBuf.append(5000);
+		sBuf.append(raioM);
 		sBuf.append("&sensor=true&types=hospital&key=AIzaSyDwKjR1P5IhWok9reBBIGZQfZqpLQr3ZmE");
 		try {
 			url= new URL(sBuf.toString());  
