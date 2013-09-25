@@ -33,7 +33,7 @@ public class HospitalFragment extends RoboFragment implements IHospitalFragment{
 		}
 		try {
 			view = inflater.inflate(R.layout.fragment_hospital, null);
-			configuraMapa();
+			
 		} catch (Exception e) {
 			Log.d("erro",e.toString());
 		}
@@ -41,6 +41,11 @@ public class HospitalFragment extends RoboFragment implements IHospitalFragment{
 		return view;
 	}
 
+	@Override
+	public void onResume() {
+		configuraMapa();
+		super.onResume();
+	}
 	private void configuraMapa(){
 
 		if(map == null) {
