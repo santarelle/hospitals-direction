@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class Rota {
+public class Route {
     private String name;
     private final List<LatLng> points;
     private List<Segmento> segments;
@@ -20,7 +20,7 @@ public class Rota {
     private LatLng pontoPartida;
     private LatLng pontoDestino;
 
-    public Rota() {
+    public Route() {
             points = new ArrayList<LatLng>();
             segments = new ArrayList<Segmento>();
     }

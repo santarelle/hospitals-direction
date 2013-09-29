@@ -11,11 +11,11 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class RotaParser {
+public class RouteParser {
 
 
-	public Rota parse(String resultado) {
-		final Rota route = new Rota();  
+	public Route parse(String resultado) {
+		final Route route = new Route();  
 	
 		try{
 			// Transforma a string em JSON  

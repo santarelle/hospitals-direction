@@ -17,7 +17,7 @@ import android.util.Log;
 import br.com.hospitalsdirection.manager.communicationsmanager.ICommunicationService;
 import br.com.hospitalsdirection.manager.contextmanager.LocationService;
 import br.com.hospitalsdirection.manager.metadadosmanager.Hospital;
-import br.com.hospitalsdirection.manager.metadadosmanager.Rota;
+import br.com.hospitalsdirection.manager.metadadosmanager.Route;
 import br.com.hospitalsdirection.view.HospitalFragment;
 import br.com.hospitalsdirection.view.IHospitalFragment;
 import br.com.hospitalsdirection.view.R;
@@ -135,7 +135,7 @@ public class HospitalPresenter implements IHospitalPresenter {
 
 			@Override
 			public boolean onMarkerClick(Marker marker) {
-				Rota rota = communicationService.getRota(location.getLatitude()+","+location.getLongitude(),marker.getPosition().latitude+","+marker.getPosition().longitude );
+				Route rota = communicationService.getRota(location.getLatitude()+","+location.getLongitude(),marker.getPosition().latitude+","+marker.getPosition().longitude );
 				adicionaLinhaMapa(rota.getPoints(), Color.BLUE);
 				return false;
 			}
