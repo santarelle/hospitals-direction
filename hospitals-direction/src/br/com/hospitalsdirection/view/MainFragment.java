@@ -22,34 +22,34 @@ public class MainFragment extends RoboFragment {
 	@Inject
 	IMainPresenter mainPresenter;
 	String[] vetMenu;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-			View view = inflater.inflate(R.layout.fragment_main, null);
-//		Button btHospitalNear = (Button) view.findViewById(R.id.btHospitalNear);
+		View view = inflater.inflate(R.layout.fragment_main, null);
+		//		Button btHospitalNear = (Button) view.findViewById(R.id.btHospitalNear);
 		//btHospitalNear.setOnClickListener(new OnClickListener() {
-			//@Override
-//			public void onClick(View view) {
-//				optionSelected(view);
-//			}
-//		});
-				getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		//@Override
+		//			public void onClick(View view) {
+		//				optionSelected(view);
+		//			}
+		//		});
+		getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-				ListView listView=(ListView) view.findViewById(R.id.listMenu);
-				vetMenu =new String[]{view.getContext().getString(R.string.radio),view.getContext().getString(R.string.hospital_proximos)};
-				ArrayAdapter<String> adapter=new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1,vetMenu );
-				listView.setAdapter(adapter);
-				listView.setOnItemClickListener(new OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> arg0, View arg1,
-							int item, long arg3) {
-						mainPresenter.optionSelected(vetMenu[item]);
-					}
-				});
+		ListView listView=(ListView) view.findViewById(R.id.listMenu);
+		vetMenu =new String[]{view.getContext().getString(R.string.radio),view.getContext().getString(R.string.hospital_proximos)};
+		ArrayAdapter<String> adapter=new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1,vetMenu );
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int item, long arg3) {
+				mainPresenter.optionSelected(vetMenu[item]);
+			}
+		});
 		return view;
 	}
 
-	
+
 
 }

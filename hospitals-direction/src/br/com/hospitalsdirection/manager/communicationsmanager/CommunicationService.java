@@ -12,8 +12,8 @@ import android.util.Log;
 import br.com.hospitalsdirection.manager.contextmanager.LocationService;
 import br.com.hospitalsdirection.manager.metadadosmanager.Hospital;
 import br.com.hospitalsdirection.manager.metadadosmanager.HospitalParser;
-import br.com.hospitalsdirection.manager.metadadosmanager.Rota;
-import br.com.hospitalsdirection.manager.metadadosmanager.RotaParser;
+import br.com.hospitalsdirection.manager.metadadosmanager.Route;
+import br.com.hospitalsdirection.manager.metadadosmanager.RouteParser;
 
 import com.google.inject.Inject;
 
@@ -25,7 +25,7 @@ public class CommunicationService implements ICommunicationService {
 	LocationService locationService;
 	
 	@Inject
-	RotaParser rotaParser;
+	RouteParser rotaParser;
 	
 	@Inject
 	HospitalParser hospitalParser;
@@ -57,8 +57,8 @@ public class CommunicationService implements ICommunicationService {
 		return hospitals;
 	}
 	
-	public Rota getRota(final String start, final String dest) {
-		Rota rota = null;
+	public Route getRota(final String start, final String dest) {
+		Route rota = null;
 		String jsonURL = "http://maps.googleapis.com/maps/api/directions/json?";
 
     	final StringBuilder sBuf = new StringBuilder(jsonURL);

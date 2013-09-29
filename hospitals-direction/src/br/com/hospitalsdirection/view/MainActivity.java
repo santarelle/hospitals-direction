@@ -15,16 +15,16 @@ import com.google.inject.Inject;
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboFragmentActivity implements IMainActivity {
 
-	
+
 	@Inject
 	MainFragment mainFragment;
-	
+
 	@Inject
 	IHospitalFragment hospitalFragment;
-	
+
 	@Inject
 	RadiusFragment radiusFragment;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,10 +33,10 @@ public class MainActivity extends RoboFragmentActivity implements IMainActivity 
 		StrictMode.setThreadPolicy(policy);
 		FragmentManager manager = getSupportFragmentManager();
 		manager.beginTransaction().replace(R.id.layout1, mainFragment,"mainFragment").commit();
-		
-		
+
+
 	}
- 
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -48,13 +48,13 @@ public class MainActivity extends RoboFragmentActivity implements IMainActivity 
 		return getApplicationContext();
 	}
 
-	
+
 
 
 	@Override
 	public void direct(Class<?> direction) {
-        Intent navigation = new Intent(this, direction);
-        this.startActivity(navigation);
+		Intent navigation = new Intent(this, direction);
+		this.startActivity(navigation);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class MainActivity extends RoboFragmentActivity implements IMainActivity 
 				manager.beginTransaction().replace(R.id.layout1, radiusFragment).addToBackStack("replaceFrag2toFrag1").commit();
 			}
 		}
-	/*	switch (viewId) {
+		/*	switch (viewId) {
 //		case R.id.btHospitalNear:
 //				FragmentManager manager = getSupportFragmentManager();
 //				manager.beginTransaction().replace(R.id.layout1, hospitalFragment).addToBackStack("replaceFrag2toFrag1").commit();
@@ -77,7 +77,7 @@ public class MainActivity extends RoboFragmentActivity implements IMainActivity 
 		default:
 			break;
 		}*/
-		
+
 	} 
 
 
