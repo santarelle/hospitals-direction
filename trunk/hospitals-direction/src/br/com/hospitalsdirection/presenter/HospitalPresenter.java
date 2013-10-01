@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import roboguice.inject.ContextSingleton;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,17 +14,27 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import br.com.hospitalsdirection.manager.communicationsmanager.ICommunicationService;
+import br.com.hospitalsdirection.manager.communicationsmanager.HospitalCommunicationService;
+import br.com.hospitalsdirection.manager.communicationsmanager.IHospitalCommunicationService;
+import br.com.hospitalsdirection.manager.communicationsmanager.IRouteCommunicationService;
+import br.com.hospitalsdirection.manager.communicationsmanager.RouteCommunicationService;
 import br.com.hospitalsdirection.manager.contextmanager.LocationService;
 import br.com.hospitalsdirection.manager.metadadosmanager.Hospital;
 import br.com.hospitalsdirection.manager.metadadosmanager.Route;
+import br.com.hospitalsdirection.utils.GoogleMapsUtils;
 import br.com.hospitalsdirection.view.HospitalFragment;
 import br.com.hospitalsdirection.view.IHospitalFragment;
 import br.com.hospitalsdirection.view.R;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.Response.ErrorListener;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -37,10 +48,9 @@ public class HospitalPresenter implements IHospitalPresenter {
 
 	IHospitalFragment hospitalFragment;
 
+	IHospitalCommunicationService communicationService;
+	IRouteCommunicationService routeCommunicationService;
 
-
-	@Inject
-	ICommunicationService communicationService;
 	@Inject
 	LocationService locationService;
 
@@ -52,6 +62,7 @@ public class HospitalPresenter implements IHospitalPresenter {
 	private Marker markerLocation;
 	private boolean proximos = false;
 	private Context context;	
+	private GoogleMap map;
 	private LocationListener locationListener = new LocationListener() {
 		@Override
 		public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
@@ -73,8 +84,8 @@ public class HospitalPresenter implements IHospitalPresenter {
 			if(markerLocation!=null){
 				markerLocation.remove();
 			}
-			markerLocation= hospitalFragment.getMap().addMarker(new MarkerOptions()
-			.position(new LatLng(location.getLatitude(), location.getLongitude()))
+			markerLocation= map.addMarker(new MarkerOptions()
+			.position(new LatLng(loc.getLatitude(), loc.getLongitude()))
 			.icon(BitmapDescriptorFactory.fromResource(R.drawable.ambulance)));
 			location =loc;
 			if(proximos){
@@ -86,7 +97,7 @@ public class HospitalPresenter implements IHospitalPresenter {
 
 			}
 		}
-	};
+	}; 
 
 
 	@Inject
@@ -96,19 +107,37 @@ public class HospitalPresenter implements IHospitalPresenter {
 		Log.d("fragmente inject", "presenter");
 	}
 
+	private void configuraMapa(){
+		if(map == null) {
+			FragmentManager fragment =((Fragment)hospitalFragment).getFragmentManager();
+			SupportMapFragment supportMapFragment =((SupportMapFragment)fragment.findFragmentById(R.id.map));
+			map =  supportMapFragment.getMap();
+			if(map != null){ 
+
+				GoogleMapsUtils	mapaUtils = new GoogleMapsUtils(supportMapFragment.getActivity(), map);
+
+				mapaUtils.setVisualizacao(GoogleMap.MAP_TYPE_NORMAL);
+				mapaUtils.configuraPosicionamento(new LatLng(-3.11056, -60.03593), 0, 0, 17);
+
+			}		
+
+		}
+	}
+
+
 	public void populate(){
-		progressDialog = ProgressDialog.show(context, "Hospitals Direction", "Carregando Informaçoes de localizaçao");
+		progressDialog = ProgressDialog.show(context, "", "Carregando Informaçoes de localizaçao");
+		configuraMapa();
 		if(locationService.gpsAtivo()){
 			location = locationService.getLocation(locationListener);
 			if(location!=null){
+				map.clear();
 				proximos = true;
 				populateHospitaisNear();
-				markerLocation= hospitalFragment.getMap().addMarker(new MarkerOptions()
+				markerLocation= map.addMarker(new MarkerOptions()
 				.position(new LatLng(location.getLatitude(), location.getLongitude())).title("")
 				.icon(BitmapDescriptorFactory.fromResource(R.drawable.ambulance)));
-				if(progressDialog.isShowing()){
-					progressDialog.dismiss();
-				}
+
 			}
 
 		}
@@ -116,13 +145,79 @@ public class HospitalPresenter implements IHospitalPresenter {
 	private void populateHospitaisNear() {
 		SharedPreferences 	shrPreference = PreferenceManager.getDefaultSharedPreferences(context);
 		float raioM = (shrPreference.getFloat("radius",5)*1000);
-		List<Hospital> listHospital = communicationService.hospitaisProximos(location.getLatitude(), location.getLongitude(),raioM);		
-		this.addMarker(listHospital);
+		communicationService = getHospitalCommunicationService();
+		communicationService.hospitaisProximos(location.getLatitude(), location.getLongitude(),raioM);		
 		proximos=false;
 	}
 
+	public HospitalCommunicationService getHospitalCommunicationService(){
+		HospitalCommunicationService communicationService = new HospitalCommunicationService(context) {
+
+			@Override
+			protected void executeResult(List<Hospital> resultList) {
+				addMarker(resultList);
+				if(progressDialog.isShowing()){
+					progressDialog.dismiss();
+				}
+
+			}
+
+			@Override
+			protected ErrorListener errorListener() {
+				
+				return new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(final VolleyError error) {
+						if (error != null) {
+							progressDialog.dismiss();
+							AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+							alertDialog.setMessage("Erro de conexão");
+							alertDialog.show();
+						}
+					}
+				};
+			}
+		};
+		return communicationService;
+	}
+
+
+	public RouteCommunicationService getRouteCommunicationService(){
+		RouteCommunicationService communicationService = new RouteCommunicationService(context) {
+
+			@Override
+			protected void executeResult(List<Route> resultList) {
+				if(resultList!=null){
+					adicionaLinhaMapa(resultList.get(0).getPoints(), Color.BLUE);
+				}
+				if(progressDialog.isShowing()){
+					progressDialog.dismiss();
+				}
+
+			}
+
+			@Override
+			protected ErrorListener errorListener() {
+				{
+					
+					return new Response.ErrorListener() {
+						@Override
+						public void onErrorResponse(final VolleyError error) {
+							if (error != null) {
+								progressDialog.dismiss();
+								AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+								alertDialog.setMessage("Erro de conexão");
+								alertDialog.show();
+							}
+						}
+					};
+				}
+			}
+		};
+		return communicationService;
+	}
+
 	private void addMarker(List<Hospital> listHospitals){
-		GoogleMap map =hospitalFragment.getMap();
 		for (Hospital hospital : listHospitals) {
 			map.addMarker(new MarkerOptions()
 			.position(new LatLng(hospital.getLatitude(), hospital.getLongitude()))
@@ -135,15 +230,15 @@ public class HospitalPresenter implements IHospitalPresenter {
 
 			@Override
 			public boolean onMarkerClick(Marker marker) {
-				Route rota = communicationService.getRota(location.getLatitude()+","+location.getLongitude(),marker.getPosition().latitude+","+marker.getPosition().longitude );
-				adicionaLinhaMapa(rota.getPoints(), Color.BLUE);
+				progressDialog = ProgressDialog.show(context, "", "Carregando Rota");
+				routeCommunicationService = getRouteCommunicationService();
+				routeCommunicationService.getRota(location.getLatitude()+","+location.getLongitude(),marker.getPosition().latitude+","+marker.getPosition().longitude );
 				return false;
 			}
 		});
 	}
 
 	public void adicionaLinhaMapa(List<LatLng> listaCoordenadas, int cor){
-
 		rectOptions = new PolylineOptions();
 
 
@@ -169,8 +264,11 @@ public class HospitalPresenter implements IHospitalPresenter {
 			if(polyline!=null){
 				polyline.remove();
 			}
-			polyline = hospitalFragment.getMap().addPolyline(rectOptions);
+			polyline =map.addPolyline(rectOptions);
 			polyline.setGeodesic(true);
+			if(progressDialog.isShowing()){
+				progressDialog.dismiss();
+			}
 		};
 	};
 

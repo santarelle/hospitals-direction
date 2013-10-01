@@ -7,11 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import br.com.hospitalsdirection.presenter.IHospitalPresenter;
-import br.com.hospitalsdirection.utils.GoogleMapsUtils;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.inject.Inject;
 
 
@@ -37,35 +34,16 @@ public class HospitalFragment extends RoboFragment implements IHospitalFragment{
 		} catch (Exception e) {
 			Log.d("erro",e.toString());
 		}
-			
+		hospitalPresenter.populate();	
 		return view;
 	}
 
 	@Override
 	public void onResume() {
-		configuraMapa();
+	
 		super.onResume();
 	}
-	private void configuraMapa(){
-
-		if(map == null) {
-
-			map =  ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-
-			if(map != null){
-				GoogleMapsUtils	mapaUtils = new GoogleMapsUtils(this.getActivity(), map);
-
-				mapaUtils.setVisualizacao(GoogleMap.MAP_TYPE_NORMAL);
-				mapaUtils.configuraPosicionamento(new LatLng(-3.11056, -60.03593), 0, 0, 17);
-
-				
-
-			}
-		}
-		hospitalPresenter.populate();
-	}
-
-	@Override
+	
 	public GoogleMap getMap() {
 		return map;
 	}
