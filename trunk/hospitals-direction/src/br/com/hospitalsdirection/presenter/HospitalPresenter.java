@@ -14,8 +14,6 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import br.com.hospitalsdirection.manager.communicationsmanager.HospitalCommunicationService;
 import br.com.hospitalsdirection.manager.communicationsmanager.IHospitalCommunicationService;
@@ -24,17 +22,15 @@ import br.com.hospitalsdirection.manager.communicationsmanager.RouteCommunicatio
 import br.com.hospitalsdirection.manager.contextmanager.LocationService;
 import br.com.hospitalsdirection.manager.metadadosmanager.Hospital;
 import br.com.hospitalsdirection.manager.metadadosmanager.Route;
-import br.com.hospitalsdirection.utils.GoogleMapsUtils;
 import br.com.hospitalsdirection.view.HospitalFragment;
 import br.com.hospitalsdirection.view.IHospitalFragment;
 import br.com.hospitalsdirection.view.R;
 
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.Response.ErrorListener;
+import com.android.volley.VolleyError;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -53,7 +49,6 @@ public class HospitalPresenter implements IHospitalPresenter {
 
 	@Inject
 	LocationService locationService;
-
 
 	private Location location;
 	private ProgressDialog progressDialog;
@@ -107,37 +102,23 @@ public class HospitalPresenter implements IHospitalPresenter {
 		Log.d("fragmente inject", "presenter");
 	}
 
-	private void configuraMapa(){
-		if(map == null) {
-			FragmentManager fragment =((Fragment)hospitalFragment).getFragmentManager();
-			SupportMapFragment supportMapFragment =((SupportMapFragment)fragment.findFragmentById(R.id.map));
-			map =  supportMapFragment.getMap();
-			if(map != null){ 
-
-				GoogleMapsUtils	mapaUtils = new GoogleMapsUtils(supportMapFragment.getActivity(), map);
-
-				mapaUtils.setVisualizacao(GoogleMap.MAP_TYPE_NORMAL);
-				mapaUtils.configuraPosicionamento(new LatLng(-3.11056, -60.03593), 0, 0, 17);
-
-			}		
-
-		}
-	}
+	
 
 
 	public void populate(){
-		progressDialog = ProgressDialog.show(context, "", "Carregando Informaçoes de localizaçao");
-		configuraMapa();
+		this.map = hospitalFragment.getMap();
+		map.clear();
+		progressDialog = ProgressDialog.show(context, "", "Carregando Informaï¿½oes de localizaï¿½ao");
 		if(locationService.gpsAtivo()){
 			location = locationService.getLocation(locationListener);
 			if(location!=null){
-				map.clear();
-				proximos = true;
 				populateHospitaisNear();
 				markerLocation= map.addMarker(new MarkerOptions()
 				.position(new LatLng(location.getLatitude(), location.getLongitude())).title("")
 				.icon(BitmapDescriptorFactory.fromResource(R.drawable.ambulance)));
 
+			}else{  
+				proximos = true;
 			}
 
 		}
@@ -171,7 +152,7 @@ public class HospitalPresenter implements IHospitalPresenter {
 						if (error != null) {
 							progressDialog.dismiss();
 							AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-							alertDialog.setMessage("Erro de conexão");
+							alertDialog.setMessage("Erro de conexï¿½o");
 							alertDialog.show();
 						}
 					}
@@ -206,7 +187,7 @@ public class HospitalPresenter implements IHospitalPresenter {
 							if (error != null) {
 								progressDialog.dismiss();
 								AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-								alertDialog.setMessage("Erro de conexão");
+								alertDialog.setMessage("Erro de conexï¿½o");
 								alertDialog.show();
 							}
 						}
