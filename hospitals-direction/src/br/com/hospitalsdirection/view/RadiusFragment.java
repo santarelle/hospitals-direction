@@ -36,7 +36,6 @@ public class RadiusFragment extends RoboFragment implements IRadiusFragment{
 				@Override
 				public void onClick(View v) {
 					radiusPresenter.configure();
-					getActivity().onBackPressed();
 				}
 			});
 		} catch (Exception e) {
