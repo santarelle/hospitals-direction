@@ -2,6 +2,7 @@ package br.com.hospitalsdirection.manager.metadadosmanager;
 
 public class Hospital {
 
+	private String nextToken;
 	private String nome;
 	private Double Latitude;
 	private Double Longitude;
@@ -23,5 +24,12 @@ public class Hospital {
 	}
 	public void setLongitude(Double longitude) {
 		Longitude = longitude;
+	}
+	
+	public String getNextToken() {
+		return nextToken;
+	}
+	public void setNextToken(String nextToken) {
+		this.nextToken = nextToken;
 	}
 }

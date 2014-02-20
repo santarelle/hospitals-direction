@@ -9,8 +9,6 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class HospitalParser {
 	private HospitalsPublic hospitalsPublic;
 
@@ -20,6 +18,10 @@ public class HospitalParser {
 		try {
 
 			final JSONObject json = new JSONObject(resultado);
+			String nextToken = null;
+			if(json.has("next_page_token")){
+				nextToken =json.getString("next_page_token");
+			}
 			final JSONArray jsonHospital = json.getJSONArray("results");
 			int numberHospital = jsonHospital.length();
 
@@ -33,6 +35,7 @@ public class HospitalParser {
 				if(containsString(hospital.getNome())){
 					hospitals.add(hospital);
 				}
+				hospital.setNextToken(nextToken);
 			}
 
 
@@ -47,7 +50,7 @@ public class HospitalParser {
 		boolean contain = false;
 		List<String> hospitalsPublic = this.hospitalsPublic.getHospitaisPublic();
 		for (String string : hospitalsPublic) {
-			if(string.equals(hospital)){
+			if(string.equalsIgnoreCase(hospital)){
 				contain=true;
 				break;
 			}

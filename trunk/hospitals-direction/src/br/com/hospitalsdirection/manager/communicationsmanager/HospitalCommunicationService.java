@@ -36,13 +36,17 @@ public abstract class HospitalCommunicationService extends ServiceRequest<Hospit
 		setEntryTime(0);
 	}
 
-	public void hospitaisProximos(Double latitude, Double longitude, float raioM){
-		String jsonURL = "https://maps.googleapis.com/maps/api/place/search/json?";
+	public void hospitaisProximos(Double latitude, Double longitude, float raioM,String nextToken){
+		String jsonURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
 		final StringBuffer sBuf = new StringBuffer(jsonURL);
 		sBuf.append("location=");
 		sBuf.append(latitude+","+longitude);
 		sBuf.append("&radius=");  
 		sBuf.append(raioM);
+		if(nextToken!=null){
+			sBuf.append("&pagetoken=");
+			sBuf.append(nextToken);
+		}
 		sBuf.append("&sensor=true&types=hospital&key=AIzaSyDwKjR1P5IhWok9reBBIGZQfZqpLQr3ZmE");
 		setNameService(sBuf.toString());
 		request(getContext(), "");

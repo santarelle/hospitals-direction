@@ -6,6 +6,6 @@ import com.google.inject.ImplementedBy;
 public interface IHospitalCommunicationService {
 	
 	
-	public void hospitaisProximos(Double latitude, Double longitude, float raioM);
+	public void hospitaisProximos(Double latitude, Double longitude, float raioM, String nextToken);
 
 }
