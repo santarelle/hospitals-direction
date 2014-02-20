@@ -15,10 +15,10 @@ public class HospitalsPublic {
 		hospitaisPublic.add("Hospital Infantil Doutor Fajardo");
 		hospitaisPublic.add("SPA Joventina Dias");
 		hospitaisPublic.add("Spa São Raimundo");
-		hospitaisPublic.add("Fundação de Medicina Tropical");
-		hospitaisPublic.add("Fundação Hospital Adriano Jorge - FHAJ");
-		hospitaisPublic.add("Fundação Dermat Trop Vener Alfredo da Mata");
-		hospitaisPublic.add("Fundação de Vigilância em Saúde-FVS");
+		hospitaisPublic.add("Fundaçao de Medicina Tropical");
+		hospitaisPublic.add("Fundaçao Hospital Adriano Jorge");
+		hospitaisPublic.add("Fundaçao Dermat Trop Vener Alfredo da Mata");
+		hospitaisPublic.add("Fundaçao de Vigilância em Saúde-FVS");
 		hospitaisPublic.add("FCECON- Fundação Centro de Controle de Oncologia");
 		hospitaisPublic.add("Pronto Socorro da Criança - Zona Sul");
 		hospitaisPublic.add("Pronto Socorro da Crianca - São José");
@@ -28,6 +28,7 @@ public class HospitalsPublic {
 		hospitaisPublic.add("Hospital Dr. Aristóteles Platão Bezerra de Araújo");
 		hospitaisPublic.add("Maternidade Ana Braga");
 		hospitaisPublic.add("Maternidade Nazira Daou");
+		hospitaisPublic.add("H S P da Criança Zona Oeste");
 	}
 	public static List<String> getHospitaisPublic() {
 		return hospitaisPublic;

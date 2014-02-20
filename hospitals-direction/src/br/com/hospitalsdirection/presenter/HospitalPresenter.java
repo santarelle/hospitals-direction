@@ -127,7 +127,7 @@ public class HospitalPresenter implements IHospitalPresenter {
 		SharedPreferences 	shrPreference = PreferenceManager.getDefaultSharedPreferences(context);
 		float raioM = (shrPreference.getFloat("radius",5)*1000);
 		communicationService = getHospitalCommunicationService();
-		communicationService.hospitaisProximos(location.getLatitude(), location.getLongitude(),raioM);		
+		communicationService.hospitaisProximos(location.getLatitude(), location.getLongitude(),raioM,null);		
 		proximos=false;
 	}
 
@@ -137,10 +137,23 @@ public class HospitalPresenter implements IHospitalPresenter {
 			@Override
 			protected void executeResult(List<Hospital> resultList) {
 				addMarker(resultList);
-				if(progressDialog.isShowing()){
-					progressDialog.dismiss();
+				if(!resultList.isEmpty()){
+					if(resultList.get(0).getNextToken()!=null ){
+						SharedPreferences 	shrPreference = PreferenceManager.getDefaultSharedPreferences(context);
+						float raioM = (shrPreference.getFloat("radius",5)*1000);
+						HospitalPresenter.this.communicationService.hospitaisProximos(location.getLatitude(), location.getLongitude(),raioM,resultList.get(0).getNextToken());	
+					}else{
+						if(progressDialog.isShowing()&& resultList.get(0).getNextToken()==null ){
+							progressDialog.dismiss();
+						}	
+					}
+				}else{
+					if(progressDialog.isShowing() ){
+						progressDialog.dismiss();
+					}
 				}
-
+			
+				
 			}
 
 			@Override
@@ -152,7 +165,7 @@ public class HospitalPresenter implements IHospitalPresenter {
 						if (error != null) {
 							progressDialog.dismiss();
 							AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-							alertDialog.setMessage("Erro de conex�o");
+							alertDialog.setMessage("Erro de conexao");
 							alertDialog.show();
 						}
 					}
