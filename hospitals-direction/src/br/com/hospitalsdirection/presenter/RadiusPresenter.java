@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import br.com.hospitalsdirection.view.IRadiusFragment;
@@ -19,6 +20,7 @@ public class RadiusPresenter implements IRadiusPresenter {
 	
 	private SharedPreferences shrPreference;
 	private EditText edtRadius;
+	private CheckBox checkBox;
 	private Context context;
 	private Activity activity;
 	@Inject
@@ -31,6 +33,8 @@ public class RadiusPresenter implements IRadiusPresenter {
 	public void populate(View view){
 		shrPreference = PreferenceManager.getDefaultSharedPreferences(context);
 		edtRadius = (EditText) view.findViewById(R.id.edtRadiusInput);
+		checkBox = (CheckBox) view.findViewById(R.id.checkPublico);
+		checkBox.setChecked(shrPreference.getBoolean("public", false));
 		edtRadius.setText(shrPreference.getFloat("radius",5)+"");
 	}
 	@Override
@@ -38,6 +42,7 @@ public class RadiusPresenter implements IRadiusPresenter {
 		Float km = Float.parseFloat(edtRadius.getText().toString());
 		if(km<=50){
 			shrPreference.edit().putFloat("radius",km).commit();
+			shrPreference.edit().putBoolean("public",checkBox.isChecked()).commit();
 			activity.onBackPressed();
 		}else{
 			Toast.makeText(context, "Distância não pode ser acima de 50 km", 5).show();
