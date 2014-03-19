@@ -1,10 +1,5 @@
 package br.com.hospitalsdirection.manager.communicationsmanager;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.List;
 
 import org.json.JSONException;
@@ -12,12 +7,9 @@ import org.json.JSONObject;
 
 import roboguice.inject.ContextSingleton;
 import android.content.Context;
-import android.util.Log;
 import br.com.hospitalsdirection.manager.contextmanager.LocationService;
 import br.com.hospitalsdirection.manager.metadadosmanager.Hospital;
 import br.com.hospitalsdirection.manager.metadadosmanager.HospitalParser;
-import br.com.hospitalsdirection.manager.metadadosmanager.Route;
-import br.com.hospitalsdirection.manager.metadadosmanager.RouteParser;
 
 import com.google.inject.Inject;
 
@@ -27,6 +19,7 @@ public abstract class HospitalCommunicationService extends ServiceRequest<Hospit
 
 	@Inject
 	LocationService locationService;
+	
 
 
 
@@ -57,7 +50,7 @@ public abstract class HospitalCommunicationService extends ServiceRequest<Hospit
 	protected List<Hospital> getResult(JSONObject response) throws JSONException {
 		List<Hospital> result = null;
 		if(response!=null){
-			result = new HospitalParser().parse(response.toString());
+			result = new HospitalParser(getContext()).parse(response.toString());
 		}
 		return result;
 	}

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import roboguice.fragment.RoboFragment;
 
 public class RadiusFragment extends RoboFragment implements IRadiusFragment{
@@ -42,6 +43,7 @@ public class RadiusFragment extends RoboFragment implements IRadiusFragment{
 			Log.d("erro",e.toString());
 		}
 			
+		
 		return view;
 	}
 	
