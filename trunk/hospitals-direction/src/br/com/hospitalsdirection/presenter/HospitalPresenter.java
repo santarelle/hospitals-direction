@@ -165,7 +165,7 @@ public class HospitalPresenter implements IHospitalPresenter {
 						if (error != null) {
 							progressDialog.dismiss();
 							AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-							alertDialog.setMessage("Erro de conexao");
+							alertDialog.setMessage(getContext().getString(R.string.erro_conexao));
 							alertDialog.show();
 						}
 					}
@@ -200,7 +200,7 @@ public class HospitalPresenter implements IHospitalPresenter {
 							if (error != null) {
 								progressDialog.dismiss();
 								AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-								alertDialog.setMessage("Erro de conex�o");
+								alertDialog.setMessage(getContext().getString(R.string.erro_conexao));
 								alertDialog.show();
 							}
 						}
