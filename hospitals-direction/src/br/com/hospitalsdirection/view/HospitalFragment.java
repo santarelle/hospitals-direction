@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import br.com.hospitalsdirection.presenter.IHospitalPresenter;
+import br.com.hospitalsdirection.presenter.HospitalPresenter;
 import br.com.hospitalsdirection.utils.GoogleMapsUtils;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -17,10 +17,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.inject.Inject;
 
 
-public class HospitalFragment extends RoboFragment implements IHospitalFragment{
+public class HospitalFragment extends RoboFragment implements HospitalView{
 
 	@Inject
-	IHospitalPresenter hospitalPresenter;
+	HospitalPresenter hospitalPresenter;
 	private GoogleMap map;
 	
 	private View view;

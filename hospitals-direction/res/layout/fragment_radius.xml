@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="numberDecimal" >
+        android:inputType="numberDecimal"
+        android:hint="Distância" >
 
         <requestFocus />
     </EditText>
@@ -20,7 +21,7 @@
 		android:layout_below="@+id/edtRadiusInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Somente Hospitais Publico" />
+        android:text="Somente Hospitais Públicos" />
 
     <Button
         android:id="@+id/config"

@@ -9,13 +9,13 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-import br.com.hospitalsdirection.view.IRadiusFragment;
+import br.com.hospitalsdirection.view.ConfigurationView;
 import br.com.hospitalsdirection.view.R;
-import br.com.hospitalsdirection.view.RadiusFragment;
+import br.com.hospitalsdirection.view.ConfigurationFragment;
 
 import com.google.inject.Inject;
 
-public class RadiusPresenter implements IRadiusPresenter {
+public class ConfigurationPresenterImpl implements ConfigurationPresenter {
 
 	
 	private SharedPreferences shrPreference;
@@ -24,7 +24,7 @@ public class RadiusPresenter implements IRadiusPresenter {
 	private Context context;
 	private Activity activity;
 	@Inject
-	public RadiusPresenter(Activity activity ,Context context){
+	public ConfigurationPresenterImpl(Activity activity ,Context context){
 		this.context = context;
 		this.activity = activity;
 		Log.d("fragmente inject", "presenter");

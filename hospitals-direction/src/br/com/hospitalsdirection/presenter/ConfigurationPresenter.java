@@ -4,8 +4,8 @@ import android.view.View;
 
 import com.google.inject.ImplementedBy;
 
-@ImplementedBy(RadiusPresenter.class)
-public interface IRadiusPresenter {
+@ImplementedBy(ConfigurationPresenterImpl.class)
+public interface ConfigurationPresenter {
 	public void configure();
 	public void populate(View view);
 
