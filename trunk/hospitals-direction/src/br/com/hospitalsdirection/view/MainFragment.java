@@ -1,6 +1,6 @@
 package br.com.hospitalsdirection.view;
 
-import br.com.hospitalsdirection.presenter.IMainPresenter;
+import br.com.hospitalsdirection.presenter.MainPresenter;
 
 import com.google.inject.Inject;
 
@@ -20,7 +20,7 @@ import android.widget.ListView;
 public class MainFragment extends RoboFragment {
 
 	@Inject
-	IMainPresenter mainPresenter;
+	MainPresenter mainPresenter;
 	String[] vetMenu;
 
 	@Override

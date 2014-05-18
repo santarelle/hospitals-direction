@@ -5,6 +5,9 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_radio">Radio</string>
-	<string name="radio">Configurar Raio</string>
-		<string name="hospital_proximos">Hospitais Proximos</string>
+	<string name="radio">Configurações</string>
+	<string name="distancia">Distancia</string>
+	<string name="hospital_proximos">Hospitais Próximos</string>
+	<string name="erro_conexao">Erro de conexão</string>
+	<string name="carregando_informacoes">"Carregando Informações de localização</string>
 </resources>

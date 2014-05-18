@@ -13,17 +13,17 @@ import android.view.Menu;
 import com.google.inject.Inject;
 
 @ContentView(R.layout.activity_main)
-public class MainActivity extends RoboFragmentActivity implements IMainActivity {
+public class MainActivity extends RoboFragmentActivity implements MainView {
 
 
 	@Inject
 	MainFragment mainFragment;
 
 	@Inject
-	IHospitalFragment hospitalFragment;
+	HospitalView hospitalFragment;
 
 	@Inject
-	RadiusFragment radiusFragment;
+	ConfigurationFragment radiusFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

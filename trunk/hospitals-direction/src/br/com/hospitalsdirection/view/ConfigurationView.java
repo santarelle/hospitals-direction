@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.google.inject.ImplementedBy;
 
-@ImplementedBy(RadiusFragment.class)
-public interface IRadiusFragment {
+@ImplementedBy(ConfigurationFragment.class)
+public interface ConfigurationView {
 	public View getView();
 }

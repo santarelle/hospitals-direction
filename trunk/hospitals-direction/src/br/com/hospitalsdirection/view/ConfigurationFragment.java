@@ -1,6 +1,6 @@
 package br.com.hospitalsdirection.view;
 
-import br.com.hospitalsdirection.presenter.IRadiusPresenter;
+import br.com.hospitalsdirection.presenter.ConfigurationPresenter;
 
 import com.google.inject.Inject;
 
@@ -14,12 +14,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import roboguice.fragment.RoboFragment;
 
-public class RadiusFragment extends RoboFragment implements IRadiusFragment{
+public class ConfigurationFragment extends RoboFragment implements ConfigurationView{
 
 	private View view;
 	
 	@Inject
-	IRadiusPresenter radiusPresenter;
+	ConfigurationPresenter radiusPresenter;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -5,7 +5,7 @@ import android.content.Context;
 import com.google.inject.ImplementedBy;
 
 @ImplementedBy(MainActivity.class)
-public interface IMainActivity {
+public interface MainView {
 
 	public Context getContext();
 	
